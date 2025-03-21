@@ -13,7 +13,7 @@ internal class Program
         builder.Services.AddSwaggerGen();
 
         //DI
-        builder.Services.AddSingleton<ICategory01, CategoryDataAccessLayer>();
+        builder.Services.AddSingleton<IInstructor, InstructorADO>();
 
         var app = builder.Build();
 
@@ -28,8 +28,8 @@ internal class Program
 
         var summaries = new[]
         {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        };
 
         app.MapGet("/weatherforecast", () =>
         {
@@ -46,12 +46,46 @@ internal class Program
         .WithName("GetWeatherForecast")
         .WithOpenApi();
 
-        app.MapGet("api/v1/Categories", () =>
+        app.MapGet("api/v1/Instructors", (IInstructor instructorData) =>
         {
-            Category01 category = new Category01();
-            category.CategoryId = 1;
-            category.CategoryName = "Gatot Subroto Ambatukam";
-            return category;
+            var instructors = instructorData.GetInstructors();
+            return instructors;
+        });
+
+        app.MapGet("api/v1/Instructors/{id}", (IInstructor instructorData, int id) =>
+        {
+            var instructor = instructorData.GetInstructor(id);
+            return instructor is not null ? Results.Ok(instructor) : Results.NotFound();
+        });
+
+        app.MapPost("api/v1/Instructors", (IInstructor instructorData, Instructor instructor) =>
+        {
+            instructorData.AddInstructor(instructor);
+            return Results.Created($"/api/v1/Instructors/{instructor.InstructorId}", instructor);
+        });
+
+        app.MapPut("api/v1/Instructors/{id}", (IInstructor instructorData, int id, Instructor updatedInstructor) =>
+        {
+            var instructor = instructorData.GetInstructor(id);
+            if (instructor is null)
+            {
+                return Results.NotFound();
+            }
+
+            instructorData.UpdateInstructor(updatedInstructor);
+            return Results.NoContent();
+        });
+
+        app.MapDelete("api/v1/Instructors/{id}", (IInstructor instructorData, int id) =>
+        {
+            var instructor = instructorData.GetInstructor(id);
+            if (instructor is null)
+            {
+                return Results.NotFound();
+            }
+
+            instructorData.DeleteInstructor(id);
+            return Results.NoContent();
         });
 
         app.Run();
