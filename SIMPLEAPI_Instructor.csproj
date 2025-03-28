@@ -4,12 +4,18 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
+    <Compile Include="data\CourseADO.cs" />
+    <Compile Include="interfaces\ICourse.cs" />
+    <Compile Include="models\ViewCourse_Categories.cs" />
+    <Compile Include="models\Course.cs" />
+    <Compile Include="Program.cs" />
   </ItemGroup>
 
 </Project>

@@ -1907,11 +1907,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\RESTFULAPI\\Tgs7_RestAPI\\SIMPLEAPI_Instructor.csproj",
+      "projectUniqueName": "D:\\RESTFULAPI\\Tgs7_RestAPI\\SIMPLEAPI_Instructor\\SIMPLEAPI_Instructor.csproj",
       "projectName": "SIMPLEAPI_Instructor",
-      "projectPath": "D:\\RESTFULAPI\\Tgs7_RestAPI\\SIMPLEAPI_Instructor.csproj",
+      "projectPath": "D:\\RESTFULAPI\\Tgs7_RestAPI\\SIMPLEAPI_Instructor\\SIMPLEAPI_Instructor.csproj",
       "packagesPath": "C:\\Users\\hp\\.nuget\\packages\\",
-      "outputPath": "D:\\RESTFULAPI\\Tgs7_RestAPI\\obj\\",
+      "outputPath": "D:\\RESTFULAPI\\Tgs7_RestAPI\\SIMPLEAPI_Instructor\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\hp\\AppData\\Roaming\\NuGet\\NuGet.Config",

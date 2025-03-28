@@ -1,9 +1,10 @@
 using SIMPLEAPI_Instructor.data;
 using SIMPLEAPI_Instructor.models;
+using SIMPLEAPI_Instructor.interfaces;
 
-internal class Program
+public class Program
 {
-    private static void Main(string[] args)
+    public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +14,7 @@ internal class Program
         builder.Services.AddSwaggerGen();
 
         //DI
-        builder.Services.AddSingleton<IInstructor, InstructorADO>();
+        builder.Services.AddSingleton<ICourse, CourseADO>();
 
         var app = builder.Build();
 
@@ -26,73 +27,36 @@ internal class Program
 
         app.UseHttpsRedirection();
 
-        var summaries = new[]
+        app.MapGet("api/v1/Courses", (ICourse courseData) =>
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        app.MapGet("/weatherforecast", () =>
-        {
-            var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-                .ToArray();
-            return forecast;
-        })
-        .WithName("GetWeatherForecast")
-        .WithOpenApi();
-
-        app.MapGet("api/v1/Instructors", (IInstructor instructorData) =>
-        {
-            var instructors = instructorData.GetInstructors();
-            return instructors;
+            var courses = courseData.GetCourses();
+            return courses;
         });
 
-        app.MapGet("api/v1/Instructors/{id}", (IInstructor instructorData, int id) =>
+        app.MapGet("api/v1/Courses/{id}", (ICourse courseData, int id) =>
         {
-            var instructor = instructorData.GetInstructor(id);
-            return instructor is not null ? Results.Ok(instructor) : Results.NotFound();
+            var course = courseData.GetCourseByID(id);
+            return course is not null ? Results.Ok(course) : Results.NotFound();
         });
 
-        app.MapPost("api/v1/Instructors", (IInstructor instructorData, Instructor instructor) =>
+        app.MapPost("api/v1/Courses", (ICourse courseData, Course course) =>
         {
-            instructorData.AddInstructor(instructor);
-            return Results.Created($"/api/v1/Instructors/{instructor.InstructorId}", instructor);
+            courseData.AddCourse(course);
+            return Results.Created($"/api/v1/Courses/{course.CourseId}", course);
         });
 
-        app.MapPut("api/v1/Instructors/{id}", (IInstructor instructorData, int id, Instructor updatedInstructor) =>
+        app.MapDelete("api/v1/Courses/{id}", (ICourse courseData, int id) =>
         {
-            var instructor = instructorData.GetInstructor(id);
-            if (instructor is null)
+            var course = courseData.GetCourseByID(id);
+            if (course is null)
             {
                 return Results.NotFound();
             }
 
-            instructorData.UpdateInstructor(updatedInstructor);
-            return Results.NoContent();
-        });
-
-        app.MapDelete("api/v1/Instructors/{id}", (IInstructor instructorData, int id) =>
-        {
-            var instructor = instructorData.GetInstructor(id);
-            if (instructor is null)
-            {
-                return Results.NotFound();
-            }
-
-            instructorData.DeleteInstructor(id);
+            courseData.DeleteCourse(id);
             return Results.NoContent();
         });
 
         app.Run();
     }
-}
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
