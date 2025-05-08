@@ -11,6 +11,7 @@ namespace SIMPLEAPI_Instructor.models
         public string CourseName { get; set; } = string.Empty; // Tambahkan nilai default
         public string CourseDescription { get; set; } = string.Empty; // Tambahkan nilai default
         public string CourseDuration { get; set; } = string.Empty; // Tambahkan nilai default
-        public string CategoryId {get; set;}
+        public int CategoryId {get; set;}
+        public Category? Category { get; set; }
     }
 }

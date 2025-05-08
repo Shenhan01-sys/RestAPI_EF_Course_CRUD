@@ -11,6 +11,7 @@ namespace SIMPLEAPI_Instructor.interfaces
         public IEnumerable<ViewCourse_Categories> GetCourses();
         public ViewCourse_Categories GetCourseByID(int CourseId);
         public Course AddCourse(Course course);
+        /*public Course UpdateCourse(Course course);*/
         public Course DeleteCourse(int courseid); 
     }   
 }

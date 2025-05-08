@@ -1,6 +1,7 @@
 using SIMPLEAPI_Instructor.data;
 using SIMPLEAPI_Instructor.models;
 using SIMPLEAPI_Instructor.interfaces;
+using Microsoft.EntityFrameworkCore;
 
 public class Program
 {
@@ -13,8 +14,11 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
         //DI
-        builder.Services.AddSingleton<ICourse, CourseADO>();
+        builder.Services.AddSingleton<ICourse, CourseEF>();
 
         var app = builder.Build();
 
