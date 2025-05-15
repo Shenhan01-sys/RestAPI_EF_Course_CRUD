@@ -15,10 +15,10 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
         //DI
-        builder.Services.AddSingleton<ICourse, CourseEF>();
+        builder.Services.AddScoped<ICourse, CourseEF>();
 
         var app = builder.Build();
 

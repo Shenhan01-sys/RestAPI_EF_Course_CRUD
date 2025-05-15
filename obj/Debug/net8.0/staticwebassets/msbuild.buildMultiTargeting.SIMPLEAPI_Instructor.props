@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\SIMPLEAPI_Instructor.props" />
+</Project>

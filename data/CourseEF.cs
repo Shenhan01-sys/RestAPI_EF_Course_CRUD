@@ -26,9 +26,9 @@ namespace SIMPLEAPI_Instructor.data
                     CourseId = c.CourseId,
                     CourseName = c.CourseName,
                     CourseDescription = c.CourseDescription,
-                    Duration = c.CourseDuration,
+                    Duration = c.Duration,
                     CategoryId = c.CategoryId,
-                    CategoryName = c.Category.CategoryName // Pastikan CategoryName ada di model Category
+                    CategoryName = c.Category != null ? c.Category.CategoryName : string.Empty // Pastikan CategoryName ada di model Category})
                 })
                 .ToList();
         }
@@ -49,9 +49,9 @@ namespace SIMPLEAPI_Instructor.data
                 CourseId = course.CourseId,
                 CourseName = course.CourseName,
                 CourseDescription = course.CourseDescription,
-                Duration = course.CourseDuration,
+                Duration = course.Duration,
                 CategoryId = course.CategoryId,
-                CategoryName = course.Category.CategoryName // Pastikan CategoryName ada di model Category
+                CategoryName = course.Category != null ? course.Category.CategoryName : string.Empty // Pastikan CategoryName ada di model Category};
             };
         }
 

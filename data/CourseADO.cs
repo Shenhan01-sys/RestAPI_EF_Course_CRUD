@@ -87,7 +87,7 @@ namespace SIMPLEAPI_Instructor.data
                     {
                         cmd.Parameters.AddWithValue("@CourseName",course.CourseName);
                         cmd.Parameters.AddWithValue("@CourseDescription", course.CourseDescription);
-                        cmd.Parameters.AddWithValue("@Duration", course.CourseDuration);
+                        cmd.Parameters.AddWithValue("@Duration", course.Duration);
                         cmd.Parameters.AddWithValue("@CategoryId", course.CategoryId);
 
                         conn.Open();
