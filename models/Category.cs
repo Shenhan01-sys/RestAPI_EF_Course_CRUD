@@ -9,5 +9,7 @@ namespace SIMPLEAPI_Instructor.models
     {
         public int CategoryId { get; set; } = 0; // Nilai default
         public string CategoryName { get; set; } = string.Empty; // Nilai default
+
+        public IEnumerable<Course> Courses { get; set; } = new List<Course>(); // Nilai default
     }
 }

@@ -9,9 +9,10 @@ namespace SIMPLEAPI_Instructor.interfaces
     public interface ICourse
     {
         public IEnumerable<ViewCourse_Categories> GetCourses();
-        public ViewCourse_Categories GetCourseByID(int CourseId);
+        public IEnumerable<Course> GetAllCourses();
+        public Course GetCourseByID(int CourseId);
         public Course AddCourse(Course course);
-        /*public Course UpdateCourse(Course course);*/
+        public Course UpdateCourse(Course UpdateCourse);
         public Course DeleteCourse(int courseid); 
     }   
 }

@@ -1,7 +1,8 @@
 using System;
-
+using Microsoft.EntityFrameworkCore;
 namespace SIMPLEAPI_Instructor.models
 {
+    [Keyless]
     public class ViewCourse_Categories
     {
         public int CourseId { get; set; }

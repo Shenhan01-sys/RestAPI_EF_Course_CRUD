@@ -19,9 +19,7 @@ namespace SIMPLEAPI_Instructor.data
         // Implementasi GetCourses
         public IEnumerable<ViewCourse_Categories> GetCourses()
         {
-            return _context.Courses
-                .Include(c => c.Category)
-                .Select(c => new ViewCourse_Categories
+            /*return _context.Courses.Include(c => c.Category).Select(c => new ViewCourse_Categories
                 {
                     CourseId = c.CourseId,
                     CourseName = c.CourseName,
@@ -30,14 +28,24 @@ namespace SIMPLEAPI_Instructor.data
                     CategoryId = c.CategoryId,
                     CategoryName = c.Category != null ? c.Category.CategoryName : string.Empty // Pastikan CategoryName ada di model Category})
                 })
-                .ToList();
+                .ToList();*/
+            var ViewCourse_Categories = from c in _context.ViewCourse_Categories
+                          orderby c.CourseName descending
+                          select c;
+            return ViewCourse_Categories;
         }
 
-        public ViewCourse_Categories GetCourseByID(int CourseId)
+        public IEnumerable<Course> GetAllCourses()
         {
-            var course = _context.Courses
-                .Include(c => c.Category)
-                .FirstOrDefault(c => c.CourseId == CourseId);
+            var courses = from c in _context.Courses.Include(c => c.Category)
+                          orderby c.CourseName descending
+                          select c;
+            return courses;
+        }
+
+        public Course GetCourseByID(int CourseId)
+        {
+            /*var course = _context.Courses.Include(c => c.Category).FirstOrDefault(c => c.CourseId == CourseId);
 
             if (course == null)
             {
@@ -52,7 +60,38 @@ namespace SIMPLEAPI_Instructor.data
                 Duration = course.Duration,
                 CategoryId = course.CategoryId,
                 CategoryName = course.Category != null ? course.Category.CategoryName : string.Empty // Pastikan CategoryName ada di model Category};
-            };
+            };*/
+            var course = (from c in _context.Courses.Include(c => c.Category)
+                                         where c.CourseId == CourseId
+                                         select c).FirstOrDefault();
+            if (course == null)
+            {
+                throw new Exception("Course not found woiiiiiiiiiiiii.");
+            }
+            return course;
+        }
+
+        public Course UpdateCourse(Course UpdateCourse)
+        {
+            var course = _context.Courses.Include(c => c.Category).FirstOrDefault(c => c.CourseId == UpdateCourse.CourseId);
+            if (course == null)
+            {
+                throw new Exception("Course not found.");
+            }
+
+            try
+            {
+                course.CourseName = UpdateCourse.CourseName;
+                course.CourseDescription = UpdateCourse.CourseDescription;
+                course.Duration = UpdateCourse.Duration;
+                course.CategoryId = UpdateCourse.CategoryId;
+                _context.SaveChanges();
+                return course;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error updating course: " + ex.Message);
+            }
         }
 
         // Implementasi AddCourse

@@ -47,10 +47,35 @@ namespace SIMPLEAPI_Instructor.data
             }
         }
 
-        public ViewCourse_Categories GetCourseByID(int CourseId)
+        public IEnumerable<Course> GetAllCourses()
         {
-            string query  = @"SELECT * FROM ViewCourse_Categories
-                                WHERE CourseId = @CourseId";
+            string query  = @"SELECT * FROM Courses";
+            using (SqlConnection conn = new SqlConnection(Connect))
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                conn.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    List<Course> courses = new List<Course>();
+                    while (reader.Read())
+                    {
+                        courses.Add(new Course
+                        {
+                            CourseId = reader.GetInt32(0),
+                            CourseName = reader.GetString(1),
+                            CourseDescription = reader.GetString(2),
+                            Duration = reader.GetInt32(3),
+                            CategoryId = reader.GetInt32(4)
+                        });
+                    }
+                    return courses;
+                }
+            }
+        }
+
+        public Course GetCourseByID(int CourseId)
+        {
+            string query = @"SELECT * FROM Courses WHERE CourseId = @CourseId";
             using (SqlConnection conn = new SqlConnection(Connect))
             {
                 SqlCommand cmd = new SqlCommand(query, conn);
@@ -58,23 +83,29 @@ namespace SIMPLEAPI_Instructor.data
                 conn.Open();
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                     if (reader.Read())
+                    if (reader.Read())
                     {
-                        return new ViewCourse_Categories
+                        return new Course
                         {
                             CourseId = reader.GetInt32(0),
                             CourseName = reader.GetString(1),
                             CourseDescription = reader.GetString(2),
                             Duration = reader.GetInt32(3),
-                            CategoryId = reader.GetInt32(4),
-                            CategoryName = reader.GetString(5)
+                            CategoryId = reader.GetInt32(4)
                         };
                     }
-                    return null;
+                    else
+                    {
+                        throw new Exception("Course not found");
+                    }
                 }
             }
         }
 
+        public Course UpdateCourse(Course UpdateCourse)
+        {   
+            throw new NotImplementedException();
+        }
         public Course AddCourse(Course course)
         {
             string query = @"INSERT INTO Courses (CourseName, CourseDescription, Duration, CategoryId)
@@ -85,7 +116,7 @@ namespace SIMPLEAPI_Instructor.data
                 {
                     try
                     {
-                        cmd.Parameters.AddWithValue("@CourseName",course.CourseName);
+                        cmd.Parameters.AddWithValue("@CourseName", course.CourseName);
                         cmd.Parameters.AddWithValue("@CourseDescription", course.CourseDescription);
                         cmd.Parameters.AddWithValue("@Duration", course.Duration);
                         cmd.Parameters.AddWithValue("@CategoryId", course.CategoryId);
